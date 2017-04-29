@@ -8,6 +8,17 @@ const {isRealString} = require("./utils/validation.js");
 const {Users} = require("./utils/users");
 
 
+const config = require("./config/config.js");
+
+const mongoose = require("./db/mongoose.js").mongoose;
+const User = require("./models/user.js").User;
+const bodyParser = require("body-parser");
+const {ObjectID} = require("mongodb");
+const _ = require("lodash");
+
+const {authenticate} = require("./middleware/authenticate.js");
+
+
 
 
 var app = express();
@@ -23,9 +34,41 @@ var users = new Users();
 
 app.use(express.static(publicPath));
 
-io.on("connection",(socket)=>{
-  console.log("New user connected");
+app.use(bodyParser.json());
 
+
+app.post("/signup",(req,res)=>{
+  console.log("receive signup");
+  console.log(req.body);
+  var body = _.pick(req.body,["name","password"]);
+  var user = new User(body);
+  user.save().then(()=>{
+    return user.generateAuthToken();
+  }).then((token)=>{
+    res.header("x-auth",token).send(user);
+  }).catch((err)=>{
+    res.status(400).send(err);
+  });
+});
+
+app.post("/login",(req,res)=>{
+  var body = _.pick(req.body,["name","password"]);
+
+  User.findByCredentials(body.name,body.password).then((user)=>{
+    //res.send(user);
+    return user.generateAuthToken().then((token)=>{
+      res.header("x-auth",token).send(user);
+    });
+
+  }).catch((err)=>{
+    res.status(400).send("something terrible");
+  });
+});
+
+//socket begin
+
+io.on("connection",(socket)=>{
+  console.log(`New user connected ${socket.id}`);
 
   socket.on('join',(params,callback)=>{
     if(!isRealString(params.name) || !isRealString(params.room)){
@@ -73,9 +116,15 @@ io.on("connection",(socket)=>{
       io.to(user.room).emit('newMessage',generateMessage('Admin',`${user.name} has left`));
     }
   });
-
-
 });
+
+//socket ending
+
+
+
+
+
+
 
 server.listen(PORT,()=>{
   console.log(`start up server on PORT ${PORT}!`);
