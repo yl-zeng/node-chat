@@ -1,5 +1,5 @@
 $("document").ready(function(){
-  $('#form-sign-up').on('submit', function(e){
+  $('#button-sign-up').on('click', function(e){
     e.preventDefault();
     var formData = $("#form-sign-up").serializeArray();
     var data = {
@@ -11,6 +11,10 @@ $("document").ready(function(){
        type: "POST",
        contentType : 'application/json',
        data: JSON.stringify(data),
+       success:function(){
+         alert("successfully sign up");
+         window.location.href="/index.html";
+       }
     });
   });
 

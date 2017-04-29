@@ -79,6 +79,13 @@ button:disabled {
   padding: 10px;
 }
 
+.form-field button {
+  width:42% !important;
+  display:inline;
+  margin:0px 5px 0px 5px;
+}
+
+
 .chat {
   display: flex;
 }
@@ -171,6 +178,10 @@ button:disabled {
 .message__title span {
   color: #999;
 }
+
+
+
+
 
 @media (max-width: 600px) {
   * {

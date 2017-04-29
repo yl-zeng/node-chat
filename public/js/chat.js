@@ -1,6 +1,11 @@
-
 $("document").ready(function (){
-  var socket = io();
+
+  var params = jQuery.deparam(window.location.search);
+
+
+  var socket = io(window.location.origin,{
+    query:`name=${params.name}&room=${params.room}&token=${params.token}`
+  });
 
   function scrollToBottom (){
     //selectors
@@ -20,12 +25,13 @@ $("document").ready(function (){
 
   socket.on("connect",function (){
     console.log("successful to connect to server");
+
     var params = jQuery.deparam(window.location.search);
 
     socket.emit("join",params,function(err){
       if(err){
         alert(err);
-        window.location.href = '/';
+        window.location.href = '/index.html';
       } else{
         console.log("no error");
       }
