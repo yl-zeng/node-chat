@@ -9,19 +9,16 @@ $("document").ready(function(){
     };
     console.log(data);
 
-    var token;
-    var name;
-
     $.ajax("/login",{
        type: "POST",
        contentType : 'application/json',
        data: JSON.stringify(data),
        success: function(result,textStatus,request){
-         name = result.name;
-         token = request.getResponseHeader("x-auth");
+         var name = result.name;
+         var token = request.getResponseHeader("token");
          console.log(token);
          console.log(name);
-         window.location.href=`/chat.html?name=${name}&room=A&token=${token}`;
+         window.location.href=`/dashboard.html?name=${name}&token=${token}`;
        }
     });
 

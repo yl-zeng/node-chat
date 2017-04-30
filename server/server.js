@@ -27,14 +27,26 @@ var io = socketIO(server);
 
 var users = new Users();
 
-
 app.use(express.static(publicPath));
-
 app.use(bodyParser.json());
 
-app.get("/test",(req,res)=>{
-  res.sendFile(path.resolve(__dirname + "/../public/index.html"));
-});
+
+// app.get("/",(req,res)=>{
+//   res.sendFile(path.resolve(__dirname + "/../public/index.html"));
+// });
+//
+// app.get("/chat",(req,res)=>{
+//   res.sendFile(path.resolve(__dirname + "/../public/chat.html"));
+// });
+//
+// app.get("/signup",(req,res)=>{
+//   res.sendFile(path.resolve(__dirname + "/../public/signup.html"));
+// });
+//
+//
+// app.get("/dashboard",(req,res)=>{
+//   res.sendFile(path.resolve(__dirname + "/../public/dashboard.html"));
+// });
 
 
 app.post("/signup",(req,res)=>{
@@ -57,7 +69,7 @@ app.post("/login",(req,res)=>{
   UserModel.findByCredentials(body.name,body.password).then((user)=>{
     //res.send(user);
     return user.generateAuthToken().then((token)=>{
-      res.header("x-auth",token).send(user);
+      res.header("token",token).send(user);
     });
 
   }).catch((err)=>{
