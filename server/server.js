@@ -5,6 +5,8 @@ const http = require("http");
 const {generateMessage,generateLocationMessage} = require("./utils/message");
 const {isRealString} = require("./utils/validation.js");
 
+
+
 const {Users} = require("./utils/users");
 
 
@@ -30,23 +32,7 @@ var users = new Users();
 app.use(express.static(publicPath));
 app.use(bodyParser.json());
 
-
-// app.get("/",(req,res)=>{
-//   res.sendFile(path.resolve(__dirname + "/../public/index.html"));
-// });
-//
-// app.get("/chat",(req,res)=>{
-//   res.sendFile(path.resolve(__dirname + "/../public/chat.html"));
-// });
-//
-// app.get("/signup",(req,res)=>{
-//   res.sendFile(path.resolve(__dirname + "/../public/signup.html"));
-// });
-//
-//
-// app.get("/dashboard",(req,res)=>{
-//   res.sendFile(path.resolve(__dirname + "/../public/dashboard.html"));
-// });
+const {authenticate} = require("./middleware/authenticate.js");
 
 
 app.post("/signup",(req,res)=>{
@@ -63,7 +49,7 @@ app.post("/signup",(req,res)=>{
   });
 });
 
-app.post("/login",(req,res)=>{
+app.post("/signin",(req,res)=>{
   var body = _.pick(req.body,["name","password"]);
 
   UserModel.findByCredentials(body.name,body.password).then((user)=>{
@@ -76,6 +62,23 @@ app.post("/login",(req,res)=>{
     res.status(400).send("something terrible");
   });
 });
+
+app.delete("/signout",(req,res)=>{
+
+  var token = req.body.token;
+  UserModel.findByToken(token).then((user)=>{
+    if(!user){
+      return Promise.reject();
+    }
+    user.removeToken(token).then(()=>{
+      res.send(user);
+    });
+  }).catch((err)=>{
+    res.status(400).send(err);
+  });
+});
+
+
 
 //socket begin
 

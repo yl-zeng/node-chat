@@ -12,8 +12,23 @@ $("document").ready(function(){
        contentType : 'application/json',
        data: JSON.stringify(data),
        success:function(){
-         alert("successfully sign up");
-         window.location.href="/index.html";
+         swal({
+           title:"",
+           type:"success",
+           text:"successfully sign up",
+           allowOutsideClick:true
+         }).then(function(){
+           window.location.href="/";
+         });
+       },
+       error:function(){
+         swal({
+           type:"error",
+           title:"sign up failed",
+           allowOutsideClick:true
+         }).then(function(){
+           window.location.href="/signup.html";
+         });
        }
     });
   });

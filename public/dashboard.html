@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
     <title> Join | chat app</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/sweetalert2.min.css">
   </head>
 
   <body class="centered-form">
@@ -24,11 +25,13 @@
         </div>
       </form>
       <div class="form-field">
-        <button id="button-enter" style="width:100%!important;margin:0;">Enter</button>
+        <button id="button-enter">Enter</button>
+        <button id="button-signout">Sign out</button>
       </div>
     </div>
     <script src="/js/libs/jquery-3.2.0.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/libs/sweetalert2.min.js"></script>
     <script src="/js/dashboard.js"></script>
     <script src="/js/libs/deparam.js"></script>
   </body>

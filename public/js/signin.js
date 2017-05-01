@@ -9,7 +9,7 @@ $("document").ready(function(){
     };
     console.log(data);
 
-    $.ajax("/login",{
+    $.ajax("/signin",{
        type: "POST",
        contentType : 'application/json',
        data: JSON.stringify(data),
@@ -19,18 +19,17 @@ $("document").ready(function(){
          console.log(token);
          console.log(name);
          window.location.href=`/dashboard.html?name=${name}&token=${token}`;
+       },
+       error: function(request,textStatus,err){
+         swal({
+           title:"sign in failed",
+           type:"error",
+           allowOutsideClick:true
+         }).then(function(){
+           $("[name='password']").val("");
+         });
        }
     });
-
-
-    // $.ajax(`/chat.html`,{
-    //   type:"GET",
-    //   headers:{
-    //     "token":token
-    //   },
-    // }).done(function (result){
-    //   window.location.href=`/chat.html?name=${name}&room=A`;
-    // });
 
   });
 
